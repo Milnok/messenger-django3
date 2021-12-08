@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <br>
+    <div class="row align-items-start">
+        <div class="col-1"></div>
+
+        <div class="col-10" align="center">
+            <div class="div-1 div-2">
+                <form method="POST" action="{% url 'send_message' friend_pk=friend %}">{% csrf_token %}
+                    {{ friend.username }}
+                    {% for message in messages %}
+                    {% if message.receiver.id == friend %}
+                    <div align="left">
+                        <h6>{{ message.date|date:"H:i" }}</h6>
+                        <h4>{{ message.text }}</h4>
+                    </div>
+                    {% else %}
+                    <div align="right">
+                        <h6>{{ message.date|date:"H:i" }}</h6>
+                        <h4>{{ message.text }}</h4>
+                    </div>
+                    {% endif %}
+                    <br><br>
+                    {% endfor %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Напишите сообщение..."
+                               aria-label="Recipient's username"
+                               aria-describedby="button-addon2" name="message">
+                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Отправить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
+
+{% endblock %}

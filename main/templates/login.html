@@ -1,0 +1,44 @@
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href=
+            "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src=
+                    "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+    <script src=
+                    "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
+    </script>
+    <script src=
+                    "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js">
+    </script>
+</head>
+{% csrf_token %}
+{% load static %}
+<style>
+    body {
+        overflow-x: hidden !important;
+        background: url({% static "main/back.jpg" %}) no-repeat center center fixed;
+    }
+    .div-1{
+    background: rgba(255,255,255,0.8);
+    border: 1px solid black;
+    padding: 30px;
+    margin: 0;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+    }
+</style>
+
+<div class="div-1" align="center">
+    <form method="POST">
+        {% csrf_token %}
+        <h4>Введите логин и пароль</h4>
+        <h4>{{ Form.username }}</h4>
+        <h4>{{ Form.password }}</h4>
+        <button type="submit" class="btn btn-outline-info btn-lg">Войти</button>
+        {{ error }}
+    </form>
+</div>

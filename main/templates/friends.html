@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div align="center">
+    <br><br>
+    <div class="row align-items-start">
+        <div class="col"></div>
+        <div class="col">
+            <div class="div-1 div-2">
+                <form method="POST" action="{% url 'add_friend'%}">{% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Введите логин"
+                               aria-label="Recipient's username"
+                               aria-describedby="button-addon2" name="friend">
+                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Добавить друга
+                        </button>
+                    </div>
+                </form>
+                {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
+                <br>
+                {% for friend in friends %}
+                <a href="{% url 'chat' friend_pk=friend.users_friend.id %}">
+                    <h1>{{ friend }}</h1>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+</div>
+{% endblock %}
