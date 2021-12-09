@@ -75,17 +75,12 @@ def add_friend(request):
         error = ''
         try:
             search_friend = User.objects.get(username=request.POST['friend'])
-            if request.user == search_friend:
-                error = 'Вы не можете добавить самого себя в друзья'
+            if request.user != search_friend:
+                friend.objects.get_or_create(user=request.user, users_friend=search_friend)
             else:
-                new_friend = friend()
-                new_friend.user = request.user
-                new_friend.users_friend = search_friend
-                new_friend.save()
+                error = 'Вы не можете добавить самого себя в друзья'
         except ObjectDoesNotExist:
             error = 'Пользователь не найден'
-        except IntegrityError:
-            error = 'Пользователь уже у вас в друзьях'
         friends_list = friend.objects.filter(user=request.user)
         return render(request, 'friends.html', {'error': error, 'friends': friends_list})
 
