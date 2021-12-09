@@ -18,7 +18,7 @@ class message(models.Model):
 
 class friend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Пользователь')
-    users_friend = models.ForeignKey(User, unique=True, on_delete=models.CASCADE, related_name='Друг')
+    users_friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Друг')
 
     def __str__(self):
         return str(self.users_friend)

@@ -93,7 +93,9 @@ def add_friend(request):
 @login_required
 def chat(request, friend_pk):
     if request.method == 'GET':
-        all_messages = (message.objects.filter(sender=request.user) | message.objects.filter(receiver=request.user)).order_by('-date')[:5][::-1]
+        your_friend = get_object_or_404(User, pk=friend_pk)
+        all_messages = (message.objects.filter(receiver=your_friend, sender=request.user) | message.objects.filter(
+            receiver=request.user, sender=your_friend)).order_by('-date')[:5][::-1]
         messages_list = safe_transfer.from_server_to_client(all_messages)
         for i in range(len(messages_list)):
             all_messages[i].text = messages_list[i]
