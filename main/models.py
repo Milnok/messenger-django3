@@ -6,6 +6,7 @@ from django.utils import timezone
 class keys(models.Model):
     keys_user = models.ForeignKey(User, unique=True, default="", on_delete=models.CASCADE, related_name='Юзер')
     open_key = models.CharField(max_length=210, null=True, blank=True, default='0', verbose_name='Открытый ключ')
+    n = models.CharField(max_length=210, null=True, blank=True, default='0', verbose_name='N')
     secret_key = models.CharField(max_length=210, null=True, blank=True, default='0', verbose_name='Секретный ключ')
 
 

@@ -5,7 +5,6 @@ from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from messenger.settings import prime_Q, prime_P
 from .functions import RSA, safe_transfer
 from .models import friend, keys, message
 
@@ -26,8 +25,9 @@ def signupuser(request):
                 user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
                 new_keys = keys()
                 new_keys.keys_user = user
-                open_key, secret_key, none = RSA.RSA_gen(prime_P, prime_Q)
-                new_keys.open_key, new_keys.secret_key = str(open_key), str(secret_key)
+                prime_P, prime_Q = RSA.RSA_gen_PQE()
+                open_key, secret_key, n = RSA.RSA_gen(prime_P, prime_Q)
+                new_keys.open_key, new_keys.secret_key, new_keys.n = str(open_key), str(secret_key), str(n)
                 new_keys.save()
                 user.save()
                 login(request, user)
@@ -91,7 +91,8 @@ def chat(request, friend_pk):
         your_friend = get_object_or_404(User, pk=friend_pk)
         all_messages = (message.objects.filter(receiver=your_friend, sender=request.user) | message.objects.filter(
             receiver=request.user, sender=your_friend)).order_by('-date')[:5][::-1]
-        messages_list = safe_transfer.from_server_to_client(all_messages)
+        my_keys = keys.objects.get(keys_user=request.user)
+        messages_list = safe_transfer.from_server_to_client(all_messages, my_keys)
         for i in range(len(messages_list)):
             all_messages[i].text = messages_list[i]
         return render(request, 'chat.html', {'friend': friend_pk, 'messages': all_messages})
